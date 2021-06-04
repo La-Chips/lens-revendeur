@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello CatalogueController!
+{% endblock %}
+
+{% block javascripts %}
+	<script src="/js/catalogue.js"></script>
+{% endblock %}
+
+{% block body %}
+	{% if revendeur.offre is not empty %}
+		<div class="container">
+			<h5>Offres Spéciales :</h5>
+			<p class="text-danger ms-4 fs-5">
+				{{revendeur.offre}}
+			</p>
+		</div>
+
+	{% endif %}
+
+	<div class=" d-flex justify-content-around flex-wrap">
+		{% for pcRevendeur in revendeur.getPcRevendeurs() %}
+
+			{% set item = pcRevendeur.pc %}
+			<div class="d-flex flex-column align-items-center shadow rounded m-5 px-3 pt-3">
+				<div class="d-flex">
+					<ul class="d-flex flex-column">
+						{% for img in item.getImages() %}
+							<li class=" mb-3 {% if loop.index == 1 %} active {% endif %}">
+								<img src="https://www.backoffice.micro76.fr/img/pc/{{img}}" alt="pc" width="50" onmouseover="changePicture('{{item.sku}}')">
+							</li>
+
+
+						{% endfor %}
+					</ul>
+					<div class="ms-2">
+						<img src="https://www.backoffice.micro76.fr/img/pc/{{item.getDisplayImg()}}" alt="pc" width="250" id="{{item.sku}}">
+
+					</div>
+
+
+				</div>
+				<div class="w-100">
+					<h4>{{item}}</h4>
+					<div class="d-flex  justify-content-around align-items-center">
+
+						<span class="fs-5">{{pcRevendeur.prix}}
+							€</span>
+						<button class="btn btn-info">Ajouter au panier</button>
+					</div>
+				</div>
+				{% if item.delai is not empty %}
+					<i class="text-start w-100 mt-3">Expédition sous
+						{{item.delai}}</i>
+
+				{% endif %}
+
+			</div>
+		{% endfor %}
+
+	</div>
+{% endblock %}
